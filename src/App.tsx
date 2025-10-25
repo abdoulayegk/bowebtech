@@ -8,7 +8,6 @@ import {
   Lightning,
   PlayCircle,
   Sparkle,
-  UsersThree,
   BookOpen,
   Users,
   TwitterLogo,
