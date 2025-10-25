@@ -5,7 +5,6 @@ import {
   ArrowRight,
   CalendarCheck,
   CaretDown,
-  CaretRight,
   ChatsCircle,
   ClockCounterClockwise,
   Lightning,
@@ -257,7 +256,7 @@ function App() {
             {/* Timeline Navigation */}
             <div className="mb-12 overflow-x-auto pb-4">
               <div className="flex gap-3 min-w-max px-2">
-                {programme2026.map((month, index) => {
+                {programme2026.map((month) => {
                   const isActive = month.id === selectedMonth.id
                   const monthAbbr = month.mois.split(' ')[0].slice(0, 3).toUpperCase()
 
