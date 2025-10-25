@@ -996,7 +996,7 @@ function App() {
                   <GithubLogo size={20} weight="bold" />
                 </a>
                 <a
-                  href="https://youtube.com/@bowebtech"
+                  href="https://www.youtube.com/@bowebtech2908"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-brand-100/70 transition-all hover:scale-110 hover:border-red-500/50 hover:bg-red-500/10 hover:text-red-400 hover:shadow-lg hover:shadow-red-500/20"
