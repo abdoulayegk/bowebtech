@@ -1,10 +1,13 @@
 import { motion } from 'framer-motion'
-import type { ComponentType } from 'react'
+import { type ComponentType, useState } from 'react'
 import type { IconProps } from '@phosphor-icons/react'
 import {
   ArrowRight,
   CalendarCheck,
+  CaretDown,
+  CaretRight,
   ChatsCircle,
+  ClockCounterClockwise,
   Lightning,
   PlayCircle,
   Sparkle,
@@ -16,10 +19,13 @@ import {
   Bell,
   CalendarPlus,
   EnvelopeSimple,
+  GithubLogo,
+  At,
+  YoutubeLogo,
 } from '@phosphor-icons/react'
 import { faqItems } from './content/faq'
 import { organisateurs } from './content/organisateurs'
-import { programme2026 } from './content/programme'
+import { pastAteliers, programme2026 } from './content/programme'
 import { resources } from './content/resources'
 import { speakers } from './content/speakers'
 
@@ -68,6 +74,13 @@ const staggerContainer = {
 const INSCRIPTION_FORM_URL = 'https://formspree.io/f/{votre-identifiant}'
 
 function App() {
+  // Le programme contient toujours au moins un mois configuré.
+  const fallbackMonth = programme2026[0]!
+  const [selectedMonthId, setSelectedMonthId] = useState(fallbackMonth.id)
+  const [showPast, setShowPast] = useState(false)
+
+  const selectedMonth = programme2026.find((month) => month.id === selectedMonthId) ?? fallbackMonth
+
   return (
     <div className="min-h-screen bg-surface-DEFAULT text-brand-100">
       {/* Hero Section - Modern Design */}
@@ -159,7 +172,7 @@ function App() {
 
             {/* Description */}
             <motion.p variants={fadeInUp} className="mx-auto mb-12 max-w-2xl text-base leading-relaxed text-brand-100/70 sm:text-lg">
-              12 ateliers mensuels pour maîtriser l'intelligence artificielle, le machine learning 
+              Au moins 2 ateliers mensuels pour maîtriser l'intelligence artificielle, le machine learning 
               et la data science. Apprentissage collaboratif, projets concrets et focus sur les 
               cas d'usage africains.
             </motion.p>
@@ -198,7 +211,7 @@ function App() {
             {/* Feature Cards */}
             <motion.div variants={fadeInUp} className="mx-auto grid max-w-5xl gap-6 md:grid-cols-3">
               {[
-                { icon: CalendarCheck, title: '12 Ateliers', desc: 'Janvier à Décembre 2026' },
+                { icon: CalendarCheck, title: 'Ateliers mensuels', desc: 'Janvier à Décembre 2026' },
                 { icon: Users, title: 'Communauté', desc: 'Mentorat & networking' },
                 { icon: BookOpen, title: 'Hands-on', desc: 'Projets pratiques' },
               ].map((feature, index) => (
@@ -234,60 +247,246 @@ function App() {
                 Programme 2026
               </span>
               <h2 className="mt-6 font-heading text-4xl font-bold text-white sm:text-5xl">
-                12 Ateliers pour Maîtriser l'IA
+                Ateliers pour Maîtriser l'IA
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-lg text-brand-100/70">
                 Un parcours complet de janvier à décembre. Théorie, pratique et projets concrets.
               </p>
             </motion.div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {programme2026.map((session, index) => (
-                <motion.div
-                  key={session.mois}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.05 }}
-                  className="group relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-surface-foreground/80 to-surface-foreground/60 p-6 backdrop-blur-sm transition-all hover:scale-105 hover:border-brand-500/50 hover:shadow-2xl hover:shadow-brand-500/20"
-                >
-                  <div className="absolute right-0 top-0 h-32 w-32 bg-gradient-to-br from-brand-500/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                  
-                  <div className="relative">
-                    <div className="mb-4 flex items-start justify-between">
-                      <span className="inline-block rounded-lg bg-brand-500/20 px-3 py-1 text-xs font-bold uppercase text-brand-300">
-                        {session.mois}
-                      </span>
-                      <span className="text-2xl font-bold text-white/10">{String(index + 1).padStart(2, '0')}</span>
-                    </div>
-                    
-                    <h3 className="mb-3 font-heading text-xl font-bold text-white">
-                      {session.titre}
-                    </h3>
-                    
-                    <p className="mb-4 text-sm leading-relaxed text-brand-100/70">
-                      {session.description}
-                    </p>
-                    
-                    <div className="mb-4 flex items-center gap-2 text-xs text-brand-100/60">
-                      <CalendarCheck size={14} />
-                      <span>{session.format}</span>
-                    </div>
-                    
-                    <div className="flex items-center justify-between border-t border-white/10 pt-4">
-                      <span className="text-sm font-medium text-brand-100/80">{session.intervenant}</span>
-                      <a
-                        href={session.inscription}
-                        className="inline-flex items-center gap-1 text-sm font-semibold text-brand-300 transition-colors group-hover:text-brand-500"
+            {/* Timeline Navigation */}
+            <div className="mb-12 overflow-x-auto pb-4">
+              <div className="flex gap-3 min-w-max px-2">
+                {programme2026.map((month, index) => {
+                  const isActive = month.id === selectedMonth.id
+                  const monthAbbr = month.mois.split(' ')[0].slice(0, 3).toUpperCase()
+
+                  return (
+                    <button
+                      key={month.id}
+                      type="button"
+                      onClick={() => setSelectedMonthId(month.id)}
+                      className="group relative flex flex-col items-center gap-2"
+                    >
+                      <div
+                        className={`flex h-14 w-14 items-center justify-center rounded-2xl text-xs font-bold transition-all ${
+                          isActive
+                            ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/40 scale-110'
+                            : 'bg-white/5 text-brand-100/60 hover:bg-brand-500/20 hover:text-brand-300'
+                        }`}
                       >
-                        Réserver
-                        <ArrowRight size={14} weight="bold" />
-                      </a>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+                        {monthAbbr}
+                      </div>
+                      <div
+                        className={`absolute -bottom-2 h-1 w-8 rounded-full transition-all ${
+                          isActive ? 'bg-brand-500' : 'bg-transparent'
+                        }`}
+                      />
+                    </button>
+                  )
+                })}
+              </div>
             </div>
+
+            {/* Main Content Card */}
+            <motion.div
+              key={selectedMonth.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-surface-foreground/90 to-surface-foreground/70 shadow-2xl shadow-brand-500/15"
+            >
+              {/* Header */}
+              <div className="border-b border-white/10 bg-surface-foreground/60 px-8 py-6">
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div>
+                    <span className="inline-flex items-center gap-2 rounded-full bg-brand-500/20 px-3 py-1 text-xs font-bold uppercase tracking-widest text-brand-300">
+                      <CalendarCheck size={14} weight="bold" />
+                      {selectedMonth.mois}
+                    </span>
+                    <h3 className="mt-3 font-heading text-3xl font-bold text-white">
+                      {selectedMonth.accroche}
+                    </h3>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-brand-100/70">
+                    <span className="rounded-full bg-white/10 px-3 py-1.5">
+                      {selectedMonth.sessions.length === 1 ? '1 atelier' : `${selectedMonth.sessions.length} ateliers`}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sessions */}
+              <div className="p-8">
+                <div className="space-y-8">
+                  {selectedMonth.sessions.map((session, sessionIndex) => {
+                    const hasMedia = Boolean(session.media)
+
+                    return (
+                      <div
+                        key={session.titre}
+                        className="group relative overflow-hidden rounded-2xl border border-white/10 bg-surface-DEFAULT/40 transition-all hover:border-brand-500/40 hover:shadow-lg hover:shadow-brand-500/20"
+                      >
+                        <div className="grid gap-6 p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
+                          {/* Video/Media Panel - Left Side on Desktop */}
+                          <div className="order-2 lg:order-1">
+                            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-surface-foreground/40">
+                              {hasMedia && session.media?.type === 'video' ? (
+                                <div className="aspect-video w-full">
+                                  <iframe
+                                    src={session.media.url}
+                                    title={`Replay de ${session.titre}`}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowFullScreen
+                                    className="h-full w-full"
+                                  />
+                                </div>
+                              ) : (
+                                <div className="flex aspect-video w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-surface-foreground/80 to-surface-foreground/40 p-6">
+                                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10">
+                                    <VideoCamera size={32} weight="duotone" className="text-brand-300" />
+                                  </div>
+                                  <div className="text-center">
+                                    <p className="font-semibold text-brand-100/90">Replay à venir</p>
+                                    <p className="mt-1 text-xs text-brand-100/60">
+                                      L'enregistrement sera disponible après la session
+                                    </p>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                            {session.media?.description && (
+                              <p className="mt-3 text-xs text-brand-100/60">{session.media.description}</p>
+                            )}
+                          </div>
+
+                          {/* Content Panel - Right Side on Desktop */}
+                          <div className="order-1 flex flex-col justify-between lg:order-2">
+                            <div>
+                              <div className="mb-4 flex items-center gap-3">
+                                <span className="inline-flex items-center rounded-full bg-brand-500/15 px-3 py-1.5 text-xs font-bold uppercase tracking-wide text-brand-300">
+                                  Atelier {sessionIndex + 1}
+                                </span>
+                                <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold text-brand-100/70">
+                                  <CalendarCheck size={12} />
+                                  {session.format}
+                                </span>
+                              </div>
+
+                              <h4 className="font-heading text-2xl font-bold text-white">
+                                {session.titre}
+                              </h4>
+
+                              <p className="mt-4 text-sm leading-relaxed text-brand-100/80">
+                                {session.description}
+                              </p>
+
+                              <div className="mt-6 flex items-center gap-2 text-xs text-brand-100/60">
+                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10">
+                                  <Users size={14} weight="bold" />
+                                </div>
+                                <span className="font-semibold">Avec {session.intervenant}</span>
+                              </div>
+                            </div>
+
+                            <div className="mt-6 flex flex-wrap gap-3">
+                              <a
+                                href={session.inscription}
+                                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-brand-500 to-brand-700 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-brand-500/30 transition-all hover:scale-105 hover:shadow-brand-500/40"
+                              >
+                                Réserver ma place
+                                <ArrowRight size={16} weight="bold" />
+                              </a>
+                              <a
+                                href="https://zoom.us/j/your-meeting-id"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-brand-100 transition-all hover:border-brand-500/50 hover:bg-brand-500/10"
+                              >
+                                <VideoCamera size={16} weight="fill" />
+                                Rejoindre sur Zoom
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Past Events Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mt-16"
+            >
+              <button
+                type="button"
+                onClick={() => setShowPast((prev) => !prev)}
+                aria-expanded={showPast}
+                className="group flex w-full items-center justify-between gap-4 rounded-2xl border border-white/10 bg-surface-foreground/60 p-6 text-left transition-all hover:border-brand-accent/40 hover:bg-surface-foreground/80"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-accent/20 transition-transform group-hover:scale-110">
+                    <ClockCounterClockwise size={24} weight="bold" className="text-brand-accent" />
+                  </div>
+                  <div>
+                    <h3 className="font-heading text-xl font-bold text-white">Archives des ateliers</h3>
+                    <p className="mt-1 text-sm text-brand-100/70">
+                      {pastAteliers.length} {pastAteliers.length === 1 ? 'session archivée' : 'sessions archivées'}
+                    </p>
+                  </div>
+                </div>
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-brand-300 transition-transform ${
+                    showPast ? 'rotate-180' : ''
+                  }`}
+                >
+                  <CaretDown size={20} weight="bold" />
+                </div>
+              </button>
+
+              {showPast && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="mt-6 grid gap-6 sm:grid-cols-2"
+                >
+                  {pastAteliers.map((month) => (
+                    <div
+                      key={month.id}
+                      className="group overflow-hidden rounded-2xl border border-white/10 bg-surface-foreground/40 transition-all hover:border-brand-accent/40 hover:shadow-lg hover:shadow-brand-accent/10"
+                    >
+                      <div className="border-b border-white/10 bg-brand-accent/10 px-6 py-4">
+                        <span className="text-xs font-bold uppercase tracking-widest text-brand-accent">
+                          {month.mois}
+                        </span>
+                        <h4 className="mt-2 font-heading text-lg font-bold text-white">{month.accroche}</h4>
+                      </div>
+                      <div className="p-6">
+                        {month.sessions.map((session) => (
+                          <div key={session.titre} className="space-y-3">
+                            <p className="font-heading text-base font-semibold text-brand-100/90">{session.titre}</p>
+                            <p className="text-sm leading-relaxed text-brand-100/70">{session.description}</p>
+                            <div className="flex items-center gap-2 pt-2 text-xs text-brand-100/60">
+                              <span className="rounded-full bg-white/10 px-2 py-1">{session.format}</span>
+                              <span>•</span>
+                              <span>{session.intervenant}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </motion.div>
           </div>
         </section>
 
@@ -630,85 +829,201 @@ function App() {
           </div>
         </section>
 
-        {/* Inscription CTA */}
-        <section id="inscription" className="relative overflow-hidden py-24">
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-700 via-brand-500 to-brand-accent" />
-          <div className="absolute inset-0 opacity-20" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M36 18c3.314 0 6 2.686 6 6s-2.686 6-6 6-6-2.686-6-6 2.686-6 6-6z' stroke='%23fff' stroke-opacity='.1'/%3E%3C/g%3E%3C/svg%3E")`
+        {/* Inscription CTA - Modern Redesign */}
+        <section id="inscription" className="relative overflow-hidden py-32">
+          {/* Animated Gradient Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-brand-500 to-orange-500" />
+          <div className="absolute inset-0">
+            <div className="absolute left-0 top-0 h-96 w-96 animate-pulse rounded-full bg-purple-500/30 blur-3xl" />
+            <div className="absolute bottom-0 right-0 h-96 w-96 animate-pulse rounded-full bg-pink-500/30 blur-3xl animation-delay-1000" />
+          </div>
+          
+          {/* Pattern Overlay */}
+          <div className="absolute inset-0 opacity-10" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M36 18c3.314 0 6 2.686 6 6s-2.686 6-6 6-6-2.686-6-6 2.686-6 6-6z' stroke='%23fff' stroke-opacity='.4'/%3E%3C/g%3E%3C/svg%3E")`
           }} />
           
-          <div className="relative mx-auto max-w-5xl px-6 text-center sm:px-10">
+          <div className="relative mx-auto max-w-6xl px-6 sm:px-10">
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.7 }}
+              className="text-center"
             >
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 backdrop-blur-sm">
-                <Sparkle size={16} weight="fill" className="text-white" />
+              {/* Badge */}
+              <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-5 py-2.5 backdrop-blur-xl">
+                <Sparkle size={18} weight="fill" className="text-white" />
                 <span className="text-sm font-bold uppercase tracking-wider text-white">
                   Rejoignez-nous
                 </span>
               </div>
               
-              <h2 className="mb-6 font-heading text-4xl font-bold text-white sm:text-5xl lg:text-6xl">
-                Prêt à Transformer Votre Parcours en IA ?
+              {/* Heading */}
+              <h2 className="mb-6 font-heading text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
+                Prêt à Transformer Votre
+                <br />
+                <span className="bg-gradient-to-r from-yellow-200 via-white to-orange-200 bg-clip-text text-transparent">
+                  Parcours en IA ?
+                </span>
               </h2>
               
-              <p className="mx-auto mb-10 max-w-2xl text-lg text-white/90">
+              {/* Description */}
+              <p className="mx-auto mb-12 max-w-2xl text-lg leading-relaxed text-white/90 sm:text-xl">
                 Inscrivez-vous pour recevoir les invitations mensuelles, les ressources 
                 exclusives et rejoindre une communauté passionnée.
               </p>
 
-              <form
-                action={INSCRIPTION_FORM_URL}
-                method="POST"
-                className="mx-auto flex max-w-lg flex-col gap-3 rounded-2xl bg-white/10 p-2 backdrop-blur-md sm:flex-row sm:items-center"
+              {/* Newsletter Form */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+                className="mx-auto max-w-2xl"
               >
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="votre.email@example.com"
-                  className="h-14 flex-1 rounded-xl border-2 border-transparent bg-white/20 px-6 text-base text-white placeholder:text-white/60 focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40"
-                />
-                <button
-                  type="submit"
-                  className="group flex h-14 items-center justify-center gap-2 rounded-xl bg-white px-8 font-bold text-brand-700 transition-all hover:scale-105 hover:shadow-2xl"
+                <form
+                  action={INSCRIPTION_FORM_URL}
+                  method="POST"
+                  className="relative overflow-hidden rounded-3xl border border-white/20 bg-white/10 p-3 backdrop-blur-2xl shadow-2xl shadow-black/20"
                 >
-                  <span>S'inscrire</span>
-                  <ArrowRight size={20} weight="bold" className="transition-transform group-hover:translate-x-1" />
-                </button>
-              </form>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <div className="relative flex-1">
+                      <EnvelopeSimple 
+                        size={20} 
+                        weight="fill" 
+                        className="absolute left-5 top-1/2 -translate-y-1/2 text-white/60"
+                      />
+                      <input
+                        type="email"
+                        name="email"
+                        required
+                        placeholder="votre.email@example.com"
+                        className="h-16 w-full rounded-2xl border-2 border-transparent bg-white/15 pl-14 pr-6 text-base text-white placeholder:text-white/60 transition-all focus:border-white focus:bg-white/20 focus:outline-none focus:ring-4 focus:ring-white/30"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="group relative flex h-16 items-center justify-center gap-2 overflow-hidden rounded-2xl bg-white px-10 font-bold text-brand-700 shadow-xl transition-all hover:scale-[1.02] hover:shadow-2xl active:scale-[0.98]"
+                    >
+                      <span className="relative z-10">S'inscrire</span>
+                      <ArrowRight 
+                        size={20} 
+                        weight="bold" 
+                        className="relative z-10 transition-transform group-hover:translate-x-1" 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-r from-white to-blue-50 opacity-0 transition-opacity group-hover:opacity-100" />
+                    </button>
+                  </div>
+                </form>
 
-              <p className="mt-6 text-sm text-white/70">
-                Pas de spam. Uniquement les informations essentielles. Désabonnement en un clic.
-              </p>
+                {/* Trust Indicators */}
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-white/80">
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+                      <Bell size={14} weight="fill" />
+                    </div>
+                    <span>Invitations mensuelles</span>
+                  </div>
+                  <div className="hidden sm:block h-4 w-px bg-white/30" />
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+                      <BookOpen size={14} weight="fill" />
+                    </div>
+                    <span>Ressources exclusives</span>
+                  </div>
+                  <div className="hidden sm:block h-4 w-px bg-white/30" />
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
+                      <Users size={14} weight="fill" />
+                    </div>
+                    <span>Communauté active</span>
+                  </div>
+                </div>
+
+                <p className="mt-6 text-sm text-white/70">
+                  Pas de spam. Uniquement les informations essentielles. Désabonnement en un clic.
+                </p>
+              </motion.div>
             </motion.div>
           </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 bg-surface-foreground py-10 text-sm text-brand-100/70">
-        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 sm:px-10 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="font-semibold text-white">© {new Date().getFullYear()} Bowebtech</p>
-            <p className="mt-1 text-xs">Communauté francophone IA & Data</p>
-          </div>
-          <div className="flex flex-wrap gap-6">
-            <a className="transition hover:text-white" href="mailto:hello@bowebtech.dev">
-              Contact
-            </a>
-            <a className="transition hover:text-white" href="https://github.com/bowebtech">
-              GitHub
-            </a>
-            <a className="transition hover:text-white" href="https://linkedin.com/company/bowebtech">
-              LinkedIn
-            </a>
-            <a className="transition hover:text-white" href="https://twitter.com/bowebtech">
-              Twitter
-            </a>
+      <footer className="border-t border-white/10 bg-surface-foreground py-16">
+        <div className="mx-auto max-w-7xl px-6 sm:px-10">
+          <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+            {/* Brand */}
+            <div>
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 shadow-lg">
+                  <span className="font-heading text-xl font-bold text-white">B</span>
+                </div>
+                <div>
+                  <p className="font-heading text-lg font-bold text-white">Bowebtech</p>
+                  <p className="text-xs text-brand-100/60">Reading Group</p>
+                </div>
+              </div>
+              <p className="mt-4 max-w-xs text-sm text-brand-100/70">
+                Communauté francophone IA & Data
+              </p>
+              <p className="mt-2 text-xs text-brand-100/60">
+                © {new Date().getFullYear()} Bowebtech. Tous droits réservés.
+              </p>
+            </div>
+
+            {/* Social Links */}
+            <div>
+              <p className="mb-4 text-sm font-semibold uppercase tracking-wider text-brand-100/80">
+                Suivez-nous
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="mailto:hello@bowebtech.dev"
+                  className="group flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-brand-100/70 transition-all hover:scale-110 hover:border-brand-500/50 hover:bg-brand-500/10 hover:text-white hover:shadow-lg hover:shadow-brand-500/20"
+                  aria-label="Contact"
+                >
+                  <At size={20} weight="bold" />
+                </a>
+                <a
+                  href="https://github.com/bowebtech"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-brand-100/70 transition-all hover:scale-110 hover:border-brand-500/50 hover:bg-brand-500/10 hover:text-white hover:shadow-lg hover:shadow-brand-500/20"
+                  aria-label="GitHub"
+                >
+                  <GithubLogo size={20} weight="bold" />
+                </a>
+                <a
+                  href="https://youtube.com/@bowebtech"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-brand-100/70 transition-all hover:scale-110 hover:border-red-500/50 hover:bg-red-500/10 hover:text-red-400 hover:shadow-lg hover:shadow-red-500/20"
+                  aria-label="YouTube"
+                >
+                  <YoutubeLogo size={20} weight="fill" />
+                </a>
+                <a
+                  href="https://linkedin.com/company/bowebtech"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-brand-100/70 transition-all hover:scale-110 hover:border-blue-500/50 hover:bg-blue-500/10 hover:text-blue-400 hover:shadow-lg hover:shadow-blue-500/20"
+                  aria-label="LinkedIn"
+                >
+                  <LinkedinLogo size={20} weight="fill" />
+                </a>
+                <a
+                  href="https://twitter.com/bowebtech"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-brand-100/70 transition-all hover:scale-110 hover:border-sky-500/50 hover:bg-sky-500/10 hover:text-sky-400 hover:shadow-lg hover:shadow-sky-500/20"
+                  aria-label="Twitter"
+                >
+                  <TwitterLogo size={20} weight="fill" />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
