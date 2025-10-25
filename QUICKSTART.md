@@ -1,8 +1,8 @@
-# 🎯 Quick Start - Déploiement en 3 commandes
+# Quick Start - Déploiement en 3 commandes
 
 Votre username GitHub: **abdoulayegk**
 
-## Option 1: Script automatique (le plus simple) ✨
+## Option 1: Script automatique (le plus simple)
 
 ```bash
 ./deploy.sh
@@ -35,7 +35,7 @@ git push
 
 ---
 
-## 🌐 URLs importantes
+## URLs importantes
 
 - **Votre site**: https://abdoulayegk.github.io/bowebtech/
 - **Repo GitHub**: https://github.com/abdoulayegk/bowebtech
@@ -44,12 +44,12 @@ git push
 
 ---
 
-## ⚙️ Configuration GitHub Pages (à faire une seule fois)
+## Configuration GitHub Pages (à faire une seule fois)
 
 1. Créez le repo sur GitHub: https://github.com/new
 
    - Nom: `bowebtech`
-   - Public ✅
+   - Public
    - Ne pas ajouter README
 
 2. Après le premier push, allez dans:
@@ -57,11 +57,11 @@ git push
    - Settings → Pages
    - Source: **GitHub Actions**
 
-3. C'est tout! ✅
+3. C'est tout!
 
 ---
 
-## 🎨 Avant de déployer
+## Avant de déployer
 
 Vérifiez `CHECKLIST.md` pour vous assurer que:
 
@@ -72,4 +72,4 @@ Vérifiez `CHECKLIST.md` pour vous assurer que:
 
 ---
 
-**Prêt ? Lancez `./deploy.sh` ! 🚀**
+**Prêt ? Lancez `./deploy.sh` !**

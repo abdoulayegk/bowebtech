@@ -7,7 +7,7 @@ export interface Speaker {
 
 export const speakers: Speaker[] = [
   {
-    nom: 'Saliou Diallo',
+    nom: 'Mamadou Saidou Diallo',
     titre: 'Data Scientist · Bowebtech',
     bio: 'Responsable des ateliers pratiques et passionné par le mentoring des étudiants en IA.',
   },
@@ -27,4 +27,3 @@ export const speakers: Speaker[] = [
     bio: 'Anime les sessions Data Storytelling pour relier la technique et les enjeux métiers.',
   },
 ]
-

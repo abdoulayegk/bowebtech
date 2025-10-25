@@ -32,7 +32,7 @@ export const programme2026: Session[] = [
     description:
       'Mettre en production un modèle grâce à un pipeline CI/CD et au monitoring continu.',
     format: 'Démo + étude de cas',
-    intervenant: 'Aïcha Faye · Ingénieure ML',
+    intervenant: 'Mamadou Saidou Diallo · Ingénieure ML',
     inscription: '#inscription',
   },
   {
@@ -41,7 +41,7 @@ export const programme2026: Session[] = [
     description:
       "Prompt engineering, fine-tuning de modèles open-source et limites éthiques de l'IA générative.",
     format: 'Workshop interactif',
-    intervenant: 'Moustapha Ba · Chercheur IA',
+    intervenant: 'Harouna  Diallo · Chercheur IA',
     inscription: '#inscription',
   },
   {
@@ -50,7 +50,7 @@ export const programme2026: Session[] = [
     description:
       'Techniques de storytelling, dashboards modernes et communication de résultats aux parties prenantes.',
     format: 'Masterclass',
-    intervenant: 'Fatou Ndiaye · Data Analyste',
+    intervenant: 'Fatou Diallo · Data Analyste',
     inscription: '#inscription',
   },
   {
@@ -68,7 +68,7 @@ export const programme2026: Session[] = [
     description:
       'Détection, segmentation et déploiement sur appareils edge pour projets concrets.',
     format: 'Lab en petits groupes',
-    intervenant: 'Souleymane Kane · Ingénieur Computer Vision',
+    intervenant: 'Souleymane Diallo · Ingénieur Computer Vision',
     inscription: '#inscription',
   },
   {
@@ -117,4 +117,3 @@ export const programme2026: Session[] = [
     inscription: '#inscription',
   },
 ]
-

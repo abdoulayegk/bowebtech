@@ -1,4 +1,4 @@
-# ✅ Checklist avant déploiement
+# Checklist avant déploiement
 
 Vérifiez ces points avant de déployer votre site :
 
@@ -36,8 +36,8 @@ Vérifiez ces points avant de déployer votre site :
 - [ ] Vérifier que le site s'affiche correctement
 - [ ] Tester tous les boutons et liens
 - [ ] Tester le formulaire d'inscription
-- [ ] Partager sur les réseaux sociaux ! 🎉
+- [ ] Partager sur les réseaux sociaux !
 
 ---
 
-**Prêt ? C'est parti ! 🚀**
+**Prêt ? C'est parti !**

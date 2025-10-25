@@ -1,8 +1,8 @@
-# 🚀 Guide de Déploiement GitHub Pages
+# Guide de Déploiement GitHub Pages
 
 ## Étapes pour déployer votre site
 
-### 1️⃣ Créer un repo GitHub
+### 1. Créer un repo GitHub
 
 1. Allez sur [github.com](https://github.com) et connectez-vous
 2. Cliquez sur **"New repository"** (bouton vert)
@@ -11,7 +11,7 @@
 5. **NE PAS** cocher "Add README" (vous en avez déjà un)
 6. Cliquez **"Create repository"**
 
-### 2️⃣ Pousser votre code sur GitHub
+### 2. Pousser votre code sur GitHub
 
 Ouvrez un terminal dans le dossier de votre projet et exécutez :
 
@@ -35,25 +35,25 @@ git remote add origin https://github.com/abdoulayegk/bowebtech.git
 git push -u origin main
 ```
 
-### 3️⃣ Activer GitHub Pages
+### 3. Activer GitHub Pages
 
 1. Allez sur votre repo GitHub
 2. Cliquez sur **Settings** (en haut)
 3. Dans le menu de gauche, cliquez sur **Pages**
 4. Sous "Source", sélectionnez **GitHub Actions**
-5. C'est tout ! 🎉
+5. C'est tout !
 
-### 4️⃣ Vérifier le déploiement
+### 4. Vérifier le déploiement
 
 1. Allez dans l'onglet **Actions** de votre repo
 2. Vous devriez voir un workflow "Deploy to GitHub Pages" en cours
-3. Attendez qu'il devienne vert ✅ (environ 1-2 minutes)
+3. Attendez qu'il devienne vert (environ 1-2 minutes)
 4. Votre site sera disponible à :
    ```
    https://abdoulayegk.github.io/bowebtech/
    ```
 
-## 🔄 Mises à jour futures
+## Mises à jour futures
 
 Chaque fois que vous faites un changement :
 
@@ -63,9 +63,9 @@ git commit -m "Description de vos changements"
 git push
 ```
 
-Le site se redéploie **automatiquement** ! ✨
+Le site se redéploie **automatiquement** !
 
-## 🌐 Ajouter un domaine personnalisé (optionnel)
+## Ajouter un domaine personnalisé (optionnel)
 
 ### Si vous possédez un domaine (ex: bowebtech.com)
 
@@ -93,7 +93,7 @@ Le site se redéploie **automatiquement** ! ✨
 
 4. **Attendez 24-48h** pour la propagation DNS
 
-## ⚠️ Résolution de problèmes
+## Résolution de problèmes
 
 ### Le workflow échoue
 
@@ -111,10 +111,10 @@ Le site se redéploie **automatiquement** ! ✨
 - Vérifiez que `base: './'` est bien dans `vite.config.ts`
 - Le nom du repo doit correspondre à l'URL
 
-## 📞 Besoin d'aide ?
+## Besoin d'aide ?
 
 Consultez la [documentation GitHub Pages](https://docs.github.com/en/pages)
 
 ---
 
-**Félicitations ! Votre site est maintenant en ligne ! 🎊**
+**Félicitations ! Votre site est maintenant en ligne !**
